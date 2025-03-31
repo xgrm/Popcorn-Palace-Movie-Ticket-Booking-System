@@ -88,7 +88,7 @@ public class MovieService {
     }
     @Modifying
     @Transactional
-    public void deleteByTitle(String movieTitle) {
+    public void deleteByTitle(String movieTitle) throws IllegalArgumentException{
         if (this.movieRepository.existsByTitle(movieTitle)) {
             this.movieRepository.deleteByTitle(movieTitle);
         } else {

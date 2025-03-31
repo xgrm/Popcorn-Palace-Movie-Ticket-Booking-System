@@ -14,4 +14,6 @@ public interface MovieRepository extends JpaRepository<Movie, Integer> {
     boolean existsByTitle(String title);
 
     void deleteByTitle(String movieTitle);
+
+    boolean existsByIdAndIsDeleted(Integer movieId,Boolean deleted);
 }
