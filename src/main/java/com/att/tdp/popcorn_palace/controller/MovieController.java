@@ -21,8 +21,8 @@ public class MovieController {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping
-    public List<MovieDTO> getAllRestaurants() {
+    @GetMapping("/all")
+    public List<MovieDTO> getAllMovies() {
         return movieService.findAll();
     }
 
