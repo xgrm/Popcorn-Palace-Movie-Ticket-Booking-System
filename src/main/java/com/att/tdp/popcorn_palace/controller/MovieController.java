@@ -1,0 +1,61 @@
+package com.att.tdp.popcorn_palace.controller;
+
+import com.att.tdp.popcorn_palace.dto.MovieDTO;
+import com.att.tdp.popcorn_palace.model.Movie;
+import com.att.tdp.popcorn_palace.service.MovieService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
+import java.util.Map;
+
+@RestController
+@RequestMapping("/movies")
+public class MovieController {
+    private final MovieService movieService;
+
+    public MovieController(MovieService movieService) {
+        this.movieService = movieService;
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping
+    public List<MovieDTO> getAllRestaurants() {
+        return movieService.findAll();
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping
+    public void addAMovie(@Valid @RequestBody Movie content) {
+        try {
+            movieService.addMovie(content);
+        }catch (IllegalArgumentException e){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PutMapping("update/{movieTitle}")
+    public void updateAMovie(@RequestBody Map<String, Object> updates, @PathVariable String movieTitle) {
+        Movie existingMovie = movieService.findByTitle(movieTitle)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Movie not found."));
+        try {
+            movieService.update(updates, existingMovie);
+        }catch (IllegalArgumentException e){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping("/{movieTitle}")
+    public void delete(@PathVariable String movieTitle) {
+        try {
+            movieService.deleteByTitle(movieTitle);
+        }catch (IllegalArgumentException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+
+    }
+}
