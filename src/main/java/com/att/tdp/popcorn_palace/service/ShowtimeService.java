@@ -4,6 +4,7 @@ import com.att.tdp.popcorn_palace.dto.ShowtimeDTO;
 import com.att.tdp.popcorn_palace.model.Showtime;
 import com.att.tdp.popcorn_palace.repository.MovieRepository;
 import com.att.tdp.popcorn_palace.repository.ShowtimesRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 
@@ -61,7 +62,8 @@ public class ShowtimeService {
         }
         this.saveShowtime(existingShowtime);
     }
-
+    @Modifying
+    @Transactional
     public void deleteById(Integer showtimeId) throws IllegalArgumentException{
         Showtime existingShowtime= this.showtimesRepository.findByIdAndIsDeleted(showtimeId,false).orElseThrow(() -> new IllegalArgumentException("Showtime is not exist!"));
         existingShowtime.setDeleted(true);
