@@ -13,11 +13,11 @@ CREATE TABLE IF NOT EXISTS movies (
 
 CREATE TABLE IF NOT EXISTS showtimes (
         id SERIAL PRIMARY KEY,
-        movieId INTEGER NOT NULL REFERENCES movies(id),
+        movie_id INTEGER NOT NULL REFERENCES movies(id),
         price NUMERIC(5, 2) NOT NULL,
         theater VARCHAR(100) NOT NULL,
-        startTime DATE NOT NULL,
-        endTime DATE NOT NULL,
+        start_time TIMESTAMP NOT NULL,
+        end_time TIMESTAMP NOT NULL,
         is_deleted BOOLEAN DEFAULT FALSE);
 
 CREATE TABLE IF NOT EXISTS bookings (
