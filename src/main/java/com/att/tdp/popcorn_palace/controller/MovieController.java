@@ -38,11 +38,9 @@ public class MovieController {
 
     @ResponseStatus(HttpStatus.OK)
     @PutMapping("update/{movieTitle}")
-    public void updateAMovie(@RequestBody Map<String, Object> updates, @PathVariable String movieTitle) {
-        Movie existingMovie = movieService.findByTitle(movieTitle)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Movie not found."));
+    public void updateAMovie(@RequestBody @Valid MovieDTO updates, @PathVariable String movieTitle) {
         try {
-            movieService.update(updates, existingMovie);
+            movieService.update(updates, movieTitle);
         }catch (IllegalArgumentException e){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
