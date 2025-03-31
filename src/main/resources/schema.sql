@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS showtimes (
         is_deleted BOOLEAN DEFAULT FALSE);
 
 CREATE TABLE IF NOT EXISTS bookings (
-        bookingId UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-        showtimeId INTEGER NOT NULL REFERENCES showtimes(id),
-        seatNumber INTEGER NOT NULL,
-        userId UUID NOT NULL);
+        booking_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        showtime_id INTEGER NOT NULL REFERENCES showtimes(id),
+        seat_number INTEGER NOT NULL,
+        user_id UUID NOT NULL);
