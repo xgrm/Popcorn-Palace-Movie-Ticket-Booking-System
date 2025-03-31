@@ -4,11 +4,12 @@ CREATE TABLE IF NOT EXISTS task (
 
 CREATE TABLE IF NOT EXISTS movies (
         id SERIAL PRIMARY KEY,
-        title VARCHAR(100) NOT NULL,
+        title VARCHAR(100) UNIQUE,
         genre VARCHAR(100) NOT NULL,
         duration INTEGER NOT NULL,
         rating NUMERIC(5, 2) NOT NULL,
-        releaseYear INT CHECK (releaseYear BETWEEN 1900 AND 2100));
+        releaseYear INT,
+        is_deleted BOOLEAN DEFAULT FALSE);
 
 CREATE TABLE IF NOT EXISTS showtimes (
         id SERIAL PRIMARY KEY,
@@ -16,7 +17,8 @@ CREATE TABLE IF NOT EXISTS showtimes (
         price NUMERIC(5, 2) NOT NULL,
         theater VARCHAR(100) NOT NULL,
         startTime DATE NOT NULL,
-        endTime DATE NOT NULL);
+        endTime DATE NOT NULL,
+        is_deleted BOOLEAN DEFAULT FALSE);
 
 CREATE TABLE IF NOT EXISTS bookings (
         bookingId UUID PRIMARY KEY DEFAULT gen_random_uuid(),
