@@ -19,7 +19,7 @@ public class BookingService {
     @Modifying
     @Transactional
     public BookingDTO addMovie(Booking content) throws IllegalArgumentException{
-        if(!showtimesRepository.existsByIdAndIsDeleted(content.getShowtimeId(),false)){
+        if(!showtimesRepository.existsById(content.getShowtimeId())){
             throw new IllegalArgumentException("Showtime not exists!");
         }
         if(bookingRepository.existsByShowtimeIdAndSeatNumber(content.getShowtimeId(),content.getSeatNumber())){

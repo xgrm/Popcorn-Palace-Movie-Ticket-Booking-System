@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Map;
+
 
 @RestController
 @RequestMapping("/movies")
@@ -28,9 +28,9 @@ public class MovieController {
 
     @ResponseStatus(HttpStatus.OK)
     @PostMapping
-    public void addAMovie(@Valid @RequestBody Movie content) {
+    public MovieDTO addAMovie(@Valid @RequestBody Movie content) {
         try {
-            movieService.addMovie(content);
+            return movieService.addMovie(content);
         }catch (IllegalArgumentException e){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }

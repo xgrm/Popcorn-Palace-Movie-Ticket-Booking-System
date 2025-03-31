@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,21 +21,17 @@ public class MovieService {
     }
 
     public List<MovieDTO> findAll() {
-        return movieRepository.findByIsDeleted(false).stream().map(movie -> new MovieDTO(movie)).collect(Collectors.toList());
+        return movieRepository.findAll().stream().map(movie -> new MovieDTO(movie)).collect(Collectors.toList());
     }
 
-    public void save(Movie content) {
-        movieRepository.save(content);
-    }
-
-    public Optional<Movie> findByTitle(String movieTitle) {
-        return movieRepository.findByTitle(movieTitle);
+    public Movie save(Movie content) {
+        return movieRepository.save(content);
     }
 
     @Modifying
     public void update(MovieDTO updates, String movieTitle) throws IllegalArgumentException{
         Movie existingMovie = this.movieRepository
-                .getByTitleAndIsDeleted(movieTitle,false)
+                .getByTitle(movieTitle)
                 .orElseThrow(()-> new IllegalArgumentException("Movie not found."));
         if(updates.getTitle() != null){
             existingMovie.setTitle(updates.getTitle());
@@ -56,9 +51,9 @@ public class MovieService {
         this.movieRepository.save(existingMovie);
     }
 
-    public void addMovie(Movie content) throws IllegalArgumentException{
+    public MovieDTO addMovie(Movie content) throws IllegalArgumentException{
         if (!this.movieRepository.existsByTitle(content.getTitle())) {
-            this.save(content);
+            return new MovieDTO(this.save(content));
         } else {
             throw new IllegalArgumentException("Movie already exists!");
         }
@@ -66,10 +61,9 @@ public class MovieService {
     @Modifying
     @Transactional
     public void deleteByTitle(String movieTitle) throws IllegalArgumentException{
-        Movie existingMovie = this.movieRepository
-                .getByTitleAndIsDeleted(movieTitle,false)
-                .orElseThrow(()-> new IllegalArgumentException("Movie not found."));
-        existingMovie.setDeleted(true);
-        this.movieRepository.save(existingMovie);
+        if(!movieRepository.existsByTitle(movieTitle)){
+            throw new IllegalArgumentException("Movie not found.");
+        }
+        this.movieRepository.deleteByTitle(movieTitle);
     }
 }
